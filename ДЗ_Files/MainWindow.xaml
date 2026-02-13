@@ -1,0 +1,91 @@
+﻿<Window x:Class="ДЗ_Files.MainWindow"
+
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+        Title="Simple File Manager" Height="450" Width="800"
+
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+
+
+
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="Auto"/>
+
+            <RowDefinition Height="*"/>
+
+            <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+
+
+
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+
+            <Grid.ColumnDefinitions>
+
+                <ColumnDefinition Width="Auto"/>
+
+                <ColumnDefinition Width="*"/>
+
+                <ColumnDefinition Width="Auto"/>
+
+            </Grid.ColumnDefinitions>
+
+
+
+            <Button x:Name="BackButton" Content="⬅ Назад" Width="70" Click="BackButton_Click"/>
+
+            <TextBox x:Name="PathTextBox" Grid.Column="1" Margin="10,0" VerticalContentAlignment="Center" KeyDown="PathTextBox_KeyDown"/>
+
+            <Button Content="Перейти" Grid.Column="2" Width="70" Click="GoButton_Click"/>
+
+        </Grid>
+
+
+
+        <ListView x:Name="FilesListView" Grid.Row="1" MouseDoubleClick="FilesListView_MouseDoubleClick">
+
+            <ListView.View>
+
+                <GridView>
+
+                    <GridViewColumn Header="Тип" Width="40" DisplayMemberBinding="{Binding Icon}"/>
+
+                    <GridViewColumn Header="Назва" Width="300" DisplayMemberBinding="{Binding Name}"/>
+
+                    <GridViewColumn Header="Дата зміни" Width="150" DisplayMemberBinding="{Binding DateModified}"/>
+
+                    <GridViewColumn Header="Розмір" Width="100" DisplayMemberBinding="{Binding Size}"/>
+
+                </GridView>
+
+            </ListView.View>
+
+            <ListView.ContextMenu>
+
+                <ContextMenu>
+
+                    <MenuItem Header="Відкрити" Click="Open_Click"/>
+
+                    <Separator/>
+
+                    <MenuItem Header="Видалити" Click="Delete_Click" Foreground="Red"/>
+
+                </ContextMenu>
+
+            </ListView.ContextMenu>
+
+        </ListView>
+
+
+
+        <TextBlock x:Name="StatusText" Grid.Row="2" Margin="0,5,0,0" Foreground="Gray"/>
+
+    </Grid>
+
+</Window>

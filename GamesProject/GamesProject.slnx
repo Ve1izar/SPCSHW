@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Games.ConsoleApp/Games.ConsoleApp.csproj" />
+  <Project Path="Games.DataAccess/Games.DataAccess.csproj" />
+  <Project Path="Games.Model/Games.Model.csproj" />
+</Solution>
