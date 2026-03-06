@@ -1,0 +1,26 @@
+﻿@model ProductModel
+
+<div class="card col-xl-2 col-lg-4 col-md-6 col-sm-12 block-scale-hover @(Model.Amount == 0 ? "opacity-50 bg-light" : "")" style="border-radius: 0; transition: 0.3s;">
+    <a asp-controller="Home" asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none text-dark h-100 d-flex flex-column">
+
+        <img style="object-fit:contain;" height="200" src="@(Model.Image != null && Model.Image.StartsWith("http") ? Model.Image : $"/images/{(string.IsNullOrWhiteSpace(Model.Image) ? "noimage.png" : $"products/{Model.Image}")}")" class="card-img-top p-2" alt="@Model.Name">
+
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">@Model.Name</h5>
+            <h6 class="text-muted">@(Model.Category != null ? Model.Category.Name : "Без категорії")</h6>
+            <partial name="_Rating" model="Model.Rating" />
+
+            <div class="mt-auto pt-3">
+                @if (Model.Amount > 0)
+                {
+                    <h4 class="text-primary fw-bold">@Model.Price.ToString("#.##") ₴</h4>
+                    <span class="badge bg-success">В наявності</span>
+                }
+                else
+                {
+                    <h4 class="text-danger fw-bold fs-5">Немає в наявності</h4>
+                }
+            </div>
+        </div>
+    </a>
+</div>

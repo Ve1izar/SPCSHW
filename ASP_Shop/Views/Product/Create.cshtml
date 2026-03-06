@@ -1,0 +1,62 @@
+﻿@model CreateProductVM
+@{
+    ViewData["Title"] = "Додавання товару";
+}
+
+<h2 class="text-center">Додавання нового товару</h2>
+<div class="w-50 mx-auto px-5 py-4 border rounded shadow-sm" style="background-color: whitesmoke;">
+    <form method="post" enctype="multipart/form-data" asp-controller="Product" asp-action="Create">
+        <div>
+            <label asp-for="Name" class="form-label mt-2 fw-bold">Назва</label>
+            <input asp-for="Name" type="text" class="form-control" placeholder="Назва товару">
+            <span asp-validation-for="Name" class="text-danger small"></span>
+        </div>
+        <div>
+            <label asp-for="Description" class="form-label mt-3 fw-bold">Опис</label>
+            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Опис товару"></textarea>
+            <span asp-validation-for="Description" class="text-danger small"></span>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label asp-for="Price" class="form-label mt-3 fw-bold">Ціна (грн)</label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="0.00">
+                <span asp-validation-for="Price" class="text-danger small"></span>
+            </div>
+            <div class="col">
+                <label asp-for="Amount" class="form-label mt-3 fw-bold">К-сть в наявності</label>
+                <input asp-for="Amount" type="number" class="form-control" placeholder="0">
+                <span asp-validation-for="Amount" class="text-danger small"></span>
+            </div>
+        </div>
+        <div>
+            <label asp-for="CategoryId" class="form-label mt-3 fw-bold">Категорія</label>
+            <select asp-for="CategoryId" asp-items="Model.SelectItems" class="form-select">
+                <option selected value="0">Без категорії</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+        </div>
+        <div>
+            <label class="form-label mt-3 fw-bold">Зображення (Файл АБО Посилання)</label>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <input accept="image/*" asp-for="Image" type="file" class="form-control" title="Завантажити з комп'ютера">
+                </div>
+                <div class="col-md-6">
+                    <input asp-for="ImageUrl" type="url" class="form-control" placeholder="https://посилання-на-картинку.jpg">
+                </div>
+            </div>
+            <div class="form-text text-muted small">Якщо ви оберете файл, посилання буде проігноровано.</div>
+            <span asp-validation-for="Image" class="text-danger small"></span>
+        </div>
+        <div class="mt-4 d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-outline-secondary w-48">Скасувати</a>
+            <button class="btn btn-success w-48" type="submit">Додати товар</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

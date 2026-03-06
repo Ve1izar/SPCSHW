@@ -1,0 +1,68 @@
+﻿@model EditProductVM
+@{
+    ViewData["Title"] = "Редагування товару";
+}
+
+<h2 class="text-center">Редагування товару</h2>
+<div class="w-50 mx-auto px-5 py-4 border rounded shadow-sm" style="background-color: whitesmoke;">
+    <form method="post" enctype="multipart/form-data" asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ExistingImage" />
+
+        <div>
+            <label asp-for="Name" class="form-label mt-2 fw-bold">Назва</label>
+            <input asp-for="Name" type="text" class="form-control">
+            <span asp-validation-for="Name" class="text-danger small"></span>
+        </div>
+        <div>
+            <label asp-for="Description" class="form-label mt-3 fw-bold">Опис</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger small"></span>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label asp-for="Price" class="form-label mt-3 fw-bold">Ціна (грн)</label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control">
+                <span asp-validation-for="Price" class="text-danger small"></span>
+            </div>
+            <div class="col">
+                <label asp-for="Amount" class="form-label mt-3 fw-bold">К-сть в наявності</label>
+                <input asp-for="Amount" type="number" class="form-control">
+                <span asp-validation-for="Amount" class="text-danger small"></span>
+            </div>
+        </div>
+        <div>
+            <label asp-for="CategoryId" class="form-label mt-3 fw-bold">Категорія</label>
+            <select asp-for="CategoryId" asp-items="Model.SelectItems" class="form-select">
+                <option value="0">Без категорії</option>
+            </select>
+        </div>
+
+        <div class="mt-4 p-3 border bg-white rounded">
+            <label class="form-label fw-bold">Поточне зображення</label><br />
+            <img src="@(Model.ExistingImage != null && Model.ExistingImage.StartsWith("http") ? Model.ExistingImage : $"/images/{(string.IsNullOrWhiteSpace(Model.ExistingImage) ? "noimage.png" : $"products/{Model.ExistingImage}")}")" height="150" class="mb-3 border rounded shadow-sm" style="object-fit:contain;" />
+
+            <label class="form-label d-block fw-bold mt-2">Замінити зображення (Файл АБО Посилання)</label>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <input accept="image/*" asp-for="NewImage" type="file" class="form-control form-control-sm">
+                </div>
+                <div class="col-md-6">
+                    <input asp-for="ImageUrl" type="url" class="form-control form-control-sm" placeholder="Вставте нове посилання">
+                </div>
+            </div>
+            <div class="form-text text-muted small">Залишіть пустим, щоб не змінювати поточну картинку.</div>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-outline-secondary w-48">Скасувати</a>
+            <button class="btn btn-warning w-48 fw-bold" type="submit">Зберегти зміни</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

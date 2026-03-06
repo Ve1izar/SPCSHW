@@ -1,0 +1,41 @@
+﻿@model ProductModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Головна</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-5">
+            <img class="img-fluid rounded border p-3 w-100" style="object-fit:contain; max-height: 500px;" src="@(Model.Image != null && Model.Image.StartsWith("http") ? Model.Image : $"/images/{(string.IsNullOrWhiteSpace(Model.Image) ? "noimage.png" : $"products/{Model.Image}")}")" alt="@Model.Name" />
+        </div>
+        <div class="col-md-7">
+            <h2>@Model.Name</h2>
+            <h5 class="text-muted mb-3">Категорія: @(Model.Category?.Name ?? "Без категорії")</h5>
+
+            <partial name="_Rating" model="Model.Rating" />
+
+            <p class="fs-5 mt-4">@Model.Description</p>
+
+            <hr class="my-4" />
+
+            @if (Model.Amount > 0)
+            {
+                <h2 class="text-primary mb-3 fw-bold">@Model.Price.ToString("#.##") ₴</h2>
+                <p class="text-success fw-bold"><i class="bi bi-check-circle-fill"></i> В наявності (@Model.Amount шт.)</p>
+                <button class="btn btn-success btn-lg mt-2"><i class="bi bi-cart-plus"></i> Додати в кошик</button>
+            }
+            else
+            {
+                <h2 class="text-danger mb-3 fw-bold">Немає в наявності</h2>
+                <button class="btn btn-secondary btn-lg mt-2" disabled>Очікується поставка</button>
+            }
+        </div>
+    </div>
+</div>
