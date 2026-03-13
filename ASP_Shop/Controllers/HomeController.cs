@@ -17,7 +17,7 @@ namespace ASP_Shop.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string? category)
+        public async Task<IActionResult> Index(string? category, string? sortOrder)
         {
             var categories = await _context.Categories.ToListAsync();
             IQueryable<ProductModel> products = _context.Products.Include(p => p.Category);
@@ -25,15 +25,26 @@ namespace ASP_Shop.Controllers
             if (!string.IsNullOrWhiteSpace(category))
             {
                 var queryCategory = categories.FirstOrDefault(c => c.Name.ToLower() == category.ToLower());
-                if (queryCategory == null) return RedirectToAction("Index");
-                products = products.Where(p => p.CategoryId == queryCategory.Id);
+                if (queryCategory != null) products = products.Where(p => p.CategoryId == queryCategory.Id);
             }
+
+            products = sortOrder switch
+            {
+                "price_asc" => products.OrderBy(p => p.Price),
+                "price_desc" => products.OrderByDescending(p => p.Price),
+                "name" => products.OrderBy(p => p.Name),
+                "rating_desc" => products.OrderByDescending(p => p.Rating),
+                _ => products.OrderByDescending(p => p.CreateDate) // За замовчуванням
+            };
 
             var viewModel = new HomeVM
             {
                 Products = await products.ToListAsync(),
                 Categories = categories
             };
+
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentCategory"] = category;
 
             return View(viewModel);
         }

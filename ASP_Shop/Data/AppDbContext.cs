@@ -1,23 +1,25 @@
 ﻿using ASP_Shop.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ASP_Shop.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<UserModel>
     {
-        public AppDbContext(DbContextOptions options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<ProductModel> Products { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             builder.Entity<ProductModel>(e =>
             {
                 e.HasKey(p => p.Id);
                 e.Property(p => p.Name).IsRequired().HasMaxLength(200);
                 e.Property(p => p.Description).HasColumnType("text");
-                e.Property(p => p.Image).HasMaxLength(100);
+                e.Property(p => p.Image).HasMaxLength(1000);
                 e.Property(p => p.Price).HasColumnType("decimal(18, 2)");
                 e.Property(p => p.Rating).HasDefaultValue(0);
                 e.Property(p => p.Amount).HasDefaultValue(0);

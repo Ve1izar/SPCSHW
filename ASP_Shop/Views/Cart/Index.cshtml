@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ASP_Shop.ViewModels.CartItemVM>
+@{
+    ViewData["Title"] = "Мій кошик";
+}
+
+<div class="container mt-4">
+    <h2>Мій кошик</h2>
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Ваш кошик порожній.</div>
+    }
+    else
+    {
+        <table class="table table-bordered align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Товар</th>
+                    <th>Ціна</th>
+                    <th>Кількість</th>
+                    <th>Сума</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-start">@item.Product.Name</td>
+                        <td>@item.Product.Price.ToString("#.##") ₴</td>
+                        <td>
+                            <a asp-action="Decrease" asp-route-id="@item.Product.Id" class="btn btn-sm btn-outline-secondary">-</a>
+                            <span class="mx-2 fw-bold">@item.Count</span>
+                            <a asp-action="Add" asp-route-id="@item.Product.Id" class="btn btn-sm btn-outline-secondary">+</a>
+                        </td>
+                        <td class="fw-bold">@item.TotalPrice.ToString("#.##") ₴</td>
+                        <td>
+                            <a asp-action="Remove" asp-route-id="@item.Product.Id" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">Загальна сума:</td>
+                    <td colspan="2" class="fw-bold fs-5 text-success">@Model.Sum(x => x.TotalPrice).ToString("#.##") ₴</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="text-end">
+            <a href="#" class="btn btn-success btn-lg">Оформити замовлення</a>
+        </div>
+    }
+</div>

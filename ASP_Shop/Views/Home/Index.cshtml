@@ -14,6 +14,20 @@
         }
     </aside>
     <main class="flex-grow-1 p-4">
+        <div class="d-flex justify-content-end mb-3">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    Сортувати за
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" asp-action="Index" asp-route-category="@ViewData["CurrentCategory"]" asp-route-sortOrder="price_asc">Найдешевші</a></li>
+                    <li><a class="dropdown-item" asp-action="Index" asp-route-category="@ViewData["CurrentCategory"]" asp-route-sortOrder="price_desc">Найдорожчі</a></li>
+                    <li><a class="dropdown-item" asp-action="Index" asp-route-category="@ViewData["CurrentCategory"]" asp-route-sortOrder="name">За назвою (А-Я)</a></li>
+                    <li><a class="dropdown-item" asp-action="Index" asp-route-category="@ViewData["CurrentCategory"]" asp-route-sortOrder="rating_desc">За рейтингом</a></li>
+                </ul>
+            </div>
+        </div>
+
         <div class="row px-3">
             @foreach (var product in Model.Products)
             {

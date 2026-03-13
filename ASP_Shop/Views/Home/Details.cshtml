@@ -29,7 +29,7 @@
             {
                 <h2 class="text-primary mb-3 fw-bold">@Model.Price.ToString("#.##") ₴</h2>
                 <p class="text-success fw-bold"><i class="bi bi-check-circle-fill"></i> В наявності (@Model.Amount шт.)</p>
-                <button class="btn btn-success btn-lg mt-2"><i class="bi bi-cart-plus"></i> Додати в кошик</button>
+                <a asp-controller="Cart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-success btn-lg">Додати в кошик</a>
             }
             else
             {
