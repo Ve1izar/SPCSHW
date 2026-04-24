@@ -27,6 +27,7 @@ builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<EmailService>();
 
 // Add automapper
 builder.Services.AddAutoMapper(cfg =>

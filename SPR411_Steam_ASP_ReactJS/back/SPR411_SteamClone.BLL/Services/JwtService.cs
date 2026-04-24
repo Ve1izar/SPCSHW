@@ -17,7 +17,7 @@ namespace SPR411_SteamClone.BLL.Services
             _jwtSettings = options.Value;
         }
 
-        public string GetAcessToken(UserEntity user)
+        public string GetAcessToken(UserEntity user, IList<string> roles) // Додали параметр roles
         {
             if(string.IsNullOrEmpty(_jwtSettings.SecretKey))
             {
@@ -32,6 +32,11 @@ namespace SPR411_SteamClone.BLL.Services
                 new Claim("lastName", user.LastName ?? string.Empty),
                 new Claim("image", user.Image ?? string.Empty)
             };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var secretKeyBytes = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
             var signInKey = new SymmetricSecurityKey(secretKeyBytes);
