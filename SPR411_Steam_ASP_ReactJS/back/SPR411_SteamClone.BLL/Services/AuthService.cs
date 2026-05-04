@@ -10,11 +10,11 @@ namespace SPR411_SteamClone.BLL.Services
         private readonly JwtService _jwtService;
 		private readonly EmailService _emailService;
 
-        public AuthService(UserManager<UserEntity> userManager, JwtService jwtService)
+        public AuthService(UserManager<UserEntity> userManager, JwtService jwtService, EmailService emailService)
         {
             _userManager = userManager;
             _jwtService = jwtService;
-			_emailService = emailService;
+            _emailService = emailService;
         }
 
         public async Task<ServiceResponse> LoginAsync(LoginDto dto)

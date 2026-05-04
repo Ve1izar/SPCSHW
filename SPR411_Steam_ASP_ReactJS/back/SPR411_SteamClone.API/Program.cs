@@ -10,17 +10,28 @@ using SPR411_SteamClone.DAL;
 using SPR411_SteamClone.DAL.Entities;
 using SPR411_SteamClone.DAL.Initializer;
 using SPR411_SteamClone.DAL.Repositories;
+using SPR411_SteamClone.API.Middlewares;
 using System.Text;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add repositories
+// Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File("logs/steam-clone-log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+// Repositories
 builder.Services.AddScoped<GenreRepository>();
 builder.Services.AddScoped<DeveloperRepository>();
 builder.Services.AddScoped<GameRepository>();
 builder.Services.AddScoped<GameImageRepository>();
 
-// Add services
+// Services
 builder.Services.AddScoped<DeveloperService>();
 builder.Services.AddScoped<GenreService>();
 builder.Services.AddScoped<GameService>();
@@ -29,7 +40,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<EmailService>();
 
-// Add automapper
+// Automapper
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.LicenseKey = "eyJhbGciOiJSUzI1NiIsImtpZCI6Ikx1Y2t5UGVubnlTb2Z0d2FyZUxpY2Vuc2VLZXkvYmJiMTNhY2I1OTkwNGQ4OWI0Y2IxYzg1ZjA4OGNjZjkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2x1Y2t5cGVubnlzb2Z0d2FyZS5jb20iLCJhdWQiOiJMdWNreVBlbm55U29mdHdhcmUiLCJleHAiOiIxNzg5NTE2ODAwIiwiaWF0IjoiMTc1ODAwNDY5MiIsImFjY291bnRfaWQiOiIwMTk5NTEzZTdlYmY3YjYwOGI4Y2I3NTI3YTE3ZTI5MyIsImN1c3RvbWVyX2lkIjoiY3RtXzAxazU4a3hoZXN2ZWI3aDZncms2MHBrYXJrIiwic3ViX2lkIjoiLSIsImVkaXRpb24iOiIwIiwidHlwZSI6IjIifQ.OMUeI0YxSQYUSUYehr5O6yevTWgsGamrSrCFSZ7Sd3fNsl01WU-pr6M6wusxNSxoQ6w8-lqrjOk6gj8KShQQhmvz91wRuRm_rObvAaDQEBRDit7iSUe6J7EH8lDmpqlUuJQ8zN0lCTgIDwaHDaI9h4FcSVy6qmi68oETGI876KCUf5ifCCwDSpZjirIws5XvO6IpQEkCp8FWd2UkTWvrHaaJWFbxOWfKbx_j5AeHPE1o5Piiz7qF6QKX8MzOj44f0yRExRKMCeQSauqRBgO33CooOm0mxbU2-Mx5tb3PPHdaFe7YxPKdRYSJ1TsRn3DELSrxnKsPE11X4eIXYuJh6w";
@@ -62,7 +73,7 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 // Options
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-// Add authentication
+// Authentication
 string? secretKey = builder.Configuration["JwtSettings:SecretKey"];
 if (string.IsNullOrEmpty(secretKey))
 {
@@ -93,7 +104,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add swagger
+// Swagger
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "SPR411", Version = "v1" });
@@ -124,7 +135,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Add cors
+// cors
 string corsPolicy = "allowAll";
 builder.Services.AddCors(cfg =>
 {
@@ -137,6 +148,8 @@ builder.Services.AddCors(cfg =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<RequestTimingMiddleware>();
 
 // Configure the HTTP request pipeline.
 
